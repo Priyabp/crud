@@ -11,6 +11,26 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+// Route::get('/', function () {
+//     return view('welcome');
+// });
+Route::get('/','IndexController@showLoginForm');
+Route::resource('/test', 'TestController');
+// Route::get('/', function ()
+// {
+// 	return view('user.login');
+// });
+// Route::get('/','Auth\AuthController@showLoginForm');
+Route::post('login','IndexController@login');
+
+// Route::group(['middleware' => ['auth']], function () {
+ Route::resource('/test', 'TestController');
+ Route::resource('/user', 'UserController');
+
+// });
+
+Route::group(array('prefix'=>'api'),function()
+{
+    Route::resource('test-user','api\TestAPIController');
 });
+

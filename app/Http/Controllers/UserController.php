@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;    
 use App\Http\Requests;
 use App\User;
-use Lrs\Tracker\Locker\Repository\Statement\EloquentRepository as Statement;
+use Lrs\Tracker\Locker\Repository\Statement\Repository as Statement;
 use Lrs\Tracker\Http\Controllers\xAPI\StatementController;
 use Lrs\Tracker\Http\Controllers\xAPI\TestController;
 use Lrs\Tracker\Http\Controllers\xAPI\StatementIndexController;
@@ -73,10 +73,41 @@ class UserController extends BaseController
             'email' => $input['email'],
             'password' => bcrypt($input['password']),
         ]);
-         // $result = (new TestController)->test();
-         // return $result;
          $data = array($user_data);
-        $result = (new StatementController)->store($data);
+         $lrs_id = array('5837e7339a8920078d7ad481');
+         $client_id = array('5837e7339a8920078d7ad482');
+         $teststatements =  '{
+        "version": "1.0.0",
+        "id": "d1eec41f-1e93-4ed6-acbf-5c4bd0c24269",
+        "actor": {
+            "objectType": "Agent",
+            "mbox": "mailto:joe@example.com"
+        },
+        "verb": {
+            "id": "http://adlnet.gov/expapi/verbs/completed",
+            "display": {
+                "en-US": "completed"
+            }
+        },
+        "object": {
+            "objectType": "Activity",
+            "id": "http://www.example.com/activities/001",
+            "definition": {
+                "name": {
+                    "en-US": "Example Activity"
+                },
+                "type": "http://adlnet.gov/expapi/activities/course"
+            }
+        },
+        "authority": {
+            "objectType": "Agent",
+            "name": "New Client",
+            "mbox": "mailto:hello@learninglocker.net"
+        },
+        "stored": "2016-11-25T09:40:59.524500+00:00",
+        "timestamp": "2016-11-25T09:40:59.524500+00:00"
+    }';
+        $result = $this->statements->store($lrs_id,$client_id,(json_decode($teststatements,true)));
         return redirect()->route('user.index');
     }
 

@@ -6,11 +6,13 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;    
 use App\Http\Requests;
 use App\User;
-use Lrs\Tracker\LrsStatement as Statement;
+use Lrs\Tracker\Locker\Repository\Statement\Repository as Statement;
+use Lrs\Tracker\Http\Controllers\xAPI\StatementController;
+use Lrs\Tracker\Http\Controllers\xAPI\TestController;
+use Lrs\Tracker\Http\Controllers\xAPI\StatementIndexController;
+use Lrs\Tracker\Http\Controllers\xAPI\StatementStoreController;
 
-
-
-class UserController extends BaseController 
+class OldUserController extends BaseController 
 {
     // Sets constants for param keys.
     // protected $statement, $lrs;
@@ -23,7 +25,8 @@ class UserController extends BaseController
     {
        
         $this->statements = $statement;
-       
+        $this->index_controller = new StatementIndexController($statement);
+        $this->store_controller = new StatementStoreController($statement);
     }
     /**
      * Display a listing of the resource.
@@ -106,11 +109,8 @@ class UserController extends BaseController
                             "timestamp": "2016-11-25T09:40:59.524500+00:00"
                
             }';
-            
-            // $result = (new StatementController)->store($lrs_id,$client_id,json_decode($teststatements,true));
-          
-           // return $result;
-        $result = $this->statements->store($lrs_id,$client_id,(json_decode($teststatements,true)));
+            $result = (new StatementController)->store($lrs_id,$client_id,json_decode($teststatements,true));
+        // $result = $this->statements->store($lrs_id,$client_id,(json_decode($teststatements,true)));
         return redirect()->route('user.index');
     }
 

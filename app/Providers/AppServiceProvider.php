@@ -23,6 +23,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+         // $this->app->register(\Lrs\Tracker\TincanServiceProvider::class);
+         // $this->app->register(\Lrs\Tracker\Locker\RequestFacade::class);
     }
+         
 }
